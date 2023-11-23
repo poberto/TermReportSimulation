@@ -1,0 +1,10 @@
+# ignore pycache
+__pycache__
+
+#ignore pipfile
+pipfile
+
+#ignore locks
+.lock
+
+
