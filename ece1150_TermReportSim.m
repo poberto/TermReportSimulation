@@ -1,13 +1,18 @@
 %Block-Code Simulation
 %Lillian Jones
 
-lenMessage = randi([2, 4]); %Generate a random length for the binary message
+lenMessage = randi([4, 4]); %Generate a random length for the binary message
 numParity = 0;
 while(2^numParity < lenMessage + numParity + 1) %Follow the equation for finding the number of parity bits...
        numParity=numParity+1; %... needed for a message of a specific length
 end
 lenWithParity = numParity + lenMessage; %Add the number of parity bits to the number of data bits to find the total length of the encoded message
 dataStr = randi([0 1], lenMessage, 1); %Create a random binary string that is the length of the message
+
+% dataStr = transpose([1 0 1 1 0 0 1]);
+% numParity = 4;
+% lenMessage = 7;
+% lenWithParity = 11;
 
 disp("Original string of data prior to encoding:");
 disp(dataStr);
@@ -29,20 +34,22 @@ while(i<=lenWithParity)
     end
     i = i + 1; %Increment
 end
+disp("Reversed data string with spaces (0's) reserved for parity bits:");
+disp(encStr);
 
 %At this point, parity bits are reserved, but not yet set
 parVec = zeros(numParity, 1); %Reserve memory for a vector holding the sum of the parity values
 for i = 1:numParity %For each parity value:
     tempPar = 0; %Follow the algorithm for determining the value of parity bits
     for j = 1:lenWithParity
-        tempStr = transpose(dec2bin(j, numParity));
+        tempStr = flip(transpose(dec2bin(j, numParity)));
         if(tempStr(i) == '1')
             tempPar = tempPar + encStr(j);
         end
     end
     parVec(i) = tempPar;
 end
-parVec = flip(parVec, 1);
+%parVec = flip(parVec, 1);
 
 for i = 1:numParity %Assign value according to even-parity:
     if(rem(parVec(i), 2) == 0 || parVec(i) == 0)
@@ -52,11 +59,14 @@ for i = 1:numParity %Assign value according to even-parity:
     end
 end
 encStr = flip(encStr, 1); %Reverse the new array with reserved parity bits
+disp("Encoded data:");
+disp(encStr);
 %----------END ENCODER HERE----------
 
 %Now, a bit error must be randomly added to the string of encoded data
 encStr = flip(encStr, 1);
-indRandom = randi([1, lenWithParity]); %Select a random bit to produce an error
+%indRandom = randi([1, lenWithParity]); %Select a random bit to produce an error
+indRandom = 6;
 if(encStr(indRandom) == 1) %Swap whatever the bit value at the specified index is
     encStr(indRandom) = 0;
 else
@@ -116,14 +126,14 @@ parVec = zeros(numParity, 1); %Reserve memory for a vector holding the sum of th
 for i = 1:numParity %For each parity value:
     tempPar = 0; %Follow the algorithm for determining the value of parity bits
     for j = 1:lenWithParity
-        tempStr = transpose(dec2bin(j, numParity));
+        tempStr = flip(transpose(dec2bin(j, numParity)));
         if(tempStr(i) == '1')
             tempPar = tempPar + encFin(j);
         end
     end
     parVec(i) = tempPar;
 end
-parVec = flip(parVec, 1);
+%parVec = flip(parVec, 1);
 
 for i = 1:numParity %Assign value according to even-parity:
     if(rem(parVec(i), 2) == 0 || parVec(i) == 0)
@@ -138,11 +148,4 @@ finalString = "";
 for i = 1:numParity
     finalString = finalString + int2str(encFin(2^(i-1)));
 end
-finalString = reverse(finalString);
-erSpace = bin2dec(finalString);
-
-
-
-
-
-
+erSpace = bin2dec(reverse(finalString));
