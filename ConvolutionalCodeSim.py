@@ -96,8 +96,11 @@ def main():
     PlotTrellis(TrellisData, states, bitnum, MLP)
 
     #plots BER vs SNR    
-    SNRs = np.arange(-20, 25, 2)
-    bers = []
+    SNRs = np.arange(0, 10, 0.5)
+    
+    BERscoded = []  # BER values with convolutional coding
+    BERsuncoded = []  # BER values without convolutional coding
+
     for snr in SNRs:
         
         encoder = ConvolutionalEncoder(3, polynomials)
@@ -113,17 +116,23 @@ def main():
         
         ber = CalculateBER(InputBits, DecodedBits)
         CorrectedErrors = CountCorrected(InputBits, np.array(list(map(int, ReceivedBits)), dtype=int), DecodedBits)
-        bers.append(ber)
+        BERscoded.append(ber)
+        
+        #without Convolutional Coding
+        signal = InputBits
+        ReceivedBitsUncoded = channel.transmit(signal)
+        BERsuncoded.append(CalculateBER(InputBits, ReceivedBitsUncoded))
+
     
     plt.figure(figsize=(10, 6))
-    plt.semilogy(SNRs, bers, 'o-', label='BER vs SNR')
-    plt.title('BER vs SNR Performance')
+    plt.semilogy(SNRs, BERscoded, 'o-', label='BER with Convolutional Coding')
+    plt.semilogy(SNRs, BERsuncoded, 'o-', label='BER without Convolutional Coding')
+    plt.title('BER vs SNR Comparison')
     plt.xlabel('SNR (dB)')
     plt.ylabel('Bit Error Rate (BER)')
     plt.grid(True, which='both')
     plt.legend()
     plt.show()
-
         
     
 

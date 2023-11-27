@@ -8,3 +8,4 @@ pipfile
 .lock
 
 
+.pyc
