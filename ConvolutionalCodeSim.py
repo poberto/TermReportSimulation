@@ -26,7 +26,7 @@ def TestEncodeDecode(InputBits, TestName):
 
 def main():
      
-    BitLength = 100 
+    BitLength = 1000
     SNRdB = 20  # Signal-to-Noise Ratio
     InputBits = np.array(RandomBits(BitLength))
     polynomials = ['111', '101']
