@@ -21,8 +21,19 @@ class ConvolutionalEncoder:
         #starts here as 0 because there are no previous input bits and initializes a string to hold output bits
         state = 0
         encoded = ""
+        
+        #iterates over each input bit to encode
         for bit in bits:
+            #converts current bit to int 0 or 1 for processing
             InputBit = int(bit)
+            
+            #The current state and the input bit together decide which output in the list of outputs is used for this input bit
+            #The outputs were iriginally defined using the state diagram of the encoder, derived from the polynomials. The length of the output is defined by the number of polynomials
+            #each polynomial contributes to one bit of the output.
             encoded += format(self.outputs[state | (InputBit << (self.constraint - 1))], f'0{len(self.polynomials)}b')
+            
+            #updates the state for the next iteration and input bit
             state = self.NextState(state, InputBit)
+            
+            #returns the final encoded sequence
         return encoded
