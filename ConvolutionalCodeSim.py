@@ -6,12 +6,14 @@ from ViterbiDecoder import ViterbiDecoder
 from channel import Channel
 
 
-
+#This function is a test function that encodes and decodes a given bit sequence and asserts that the decoded bits match the input
 def TestEncodeDecode(InputBits, TestName):
+    #defines the polynomials used for encoding and decoding and initializes the encoder and decoder
     polynomials = ['111', '101']
     encoder = ConvolutionalEncoder(3, polynomials)
     decoder = ViterbiDecoder(3, [int(poly, 2) for poly in polynomials])
 
+    #calculates the encoded bits and then decodes them using the encoder and decoder
     EncodedBits = encoder.encode(InputBits)
     DecodedBits, TrellisData, MLP  = decoder.decode(''.join(map(str, EncodedBits)))
 
@@ -19,18 +21,23 @@ def TestEncodeDecode(InputBits, TestName):
     print(f"Encoded Bits: {EncodedBits}")
     print(f"Decoded Bits: {DecodedBits}\n")
     
+    #asserts that the decoded bits match the input
     assert ''.join(map(str, DecodedBits)) == ''.join(map(str, InputBits)), f"Test failed: {TestName} - Input: {InputBits}, Decoded: {DecodedBits}"
     print(f"Test passed: {TestName}")
 
 
 
 def main():
-     
+    
+    #defines Signal to noise ratio and bit length 
     BitLength = 1000
     SNRdB = 20  # Signal-to-Noise Ratio
     InputBits = np.array(RandomBits(BitLength))
     polynomials = ['111', '101']
     
+    
+    # Conduct various tests with different input bit sequences to validate the encoder and decoder.
+    # These tests cover basic encoding/decoding, handling of different bit patterns, and edge cases.
     TestEncodeDecode([1, 0, 1, 1], "Basic Encoding and Decoding")
     TestEncodeDecode([1, 0, 1, 1], "Basic Encoding and Decoding")
     TestEncodeDecode([1, 1, 0, 0, 1, 1, 0, 1, 0, 1], "Longer Bit Sequence")
@@ -57,6 +64,7 @@ def main():
            0, 0, 1, 1, 1, 0, 0, 1, 1, 0, 1, 1, 0, 0, 0, 0, 0, 0, 1, 1, 0, 1,
            1, 1],'testsnr')
     
+    # Initialize the encoder, decoder, and channel with the given parameters.
     encoder = ConvolutionalEncoder(3, polynomials)
     decoder = ViterbiDecoder(3, [int(poly, 2) for poly in polynomials])
     channel = Channel(SNRdB)
