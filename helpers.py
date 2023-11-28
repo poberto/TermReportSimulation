@@ -57,7 +57,7 @@ def RandomBits(length):
     return [random.randint(0, 1) for _ in range(length)]
 
 #plits the trellis diagram of the decoder and highlights the most likely path(MLP)
-def PlotTrellis(trellis_data, states, bitnum, isConvolutional, MLP=None):
+def PlotTrellis(trellis_data, states, bitnum, MLP=None):
     plt.figure(figsize=(12, 8))
 
     for bit in range(bitnum):
@@ -77,10 +77,10 @@ def PlotTrellis(trellis_data, states, bitnum, isConvolutional, MLP=None):
     state_labels = [f'State {i}' for i in range(states)]
     plt.yticks(range(states), state_labels)
     plt.xticks(range(bitnum + 1))
-    if(isConvolutional):
-        plt.title('Trellis Diagram (Convolutional)')
-    else:
-        plt.title('Trellis Diagram (Block)')
+    # if(isConvolutional):
+    #     plt.title('Trellis Diagram (Convolutional)')
+    # else:
+    #     plt.title('Trellis Diagram (Block)')
     plt.xlabel('Time Step')
     plt.ylabel('State')
     plt.grid(True)

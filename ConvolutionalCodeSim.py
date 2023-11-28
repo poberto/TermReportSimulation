@@ -152,11 +152,9 @@ def main():
     plt.show()
     
     
-    # Create a 3D plot
+    #3D plot
     fig = plt.figure(figsize=(12, 9))
     ax = fig.add_subplot(111, projection='3d')
-
-    # Prepare data for 3D surface plot
     X, Y, Z = [], [], []
     for scenario, bers in BERscoded.items():
         code_rate = 1 / len(polynomial_sets[scenario])  # Calculate code rate
@@ -164,12 +162,9 @@ def main():
         Y.extend([code_rate] * len(SNRs))
         Z.extend(bers)
     
-    # Convert lists to numpy arrays for interpolation
     X = np.array(X)
     Y = np.array(Y)
     Z = np.array(Z)
-
-    # Create grid
     xi = np.linspace(X.min(), X.max(), 200)
     yi = np.linspace(Y.min(), Y.max(), 200)
     xi, yi = np.meshgrid(xi, yi)
@@ -181,17 +176,11 @@ def main():
     surf = ax.plot_surface(xi, yi, zi, cmap=plt.cm.coolwarm, linewidth=0, antialiased=False, shade=True)
     ax.contour3D(xi, yi, zi, 50, linestyles="solid", colors='k')
     cset = ax.contourf(xi, yi, zi, zdir='z', offset=zi.min(), cmap=plt.cm.coolwarm, alpha=0.5)
-
-    
-    # Add labels and title
     ax.set_xlabel('SNR (dB)')
     ax.set_ylabel('Code Rate')
     ax.set_zlabel('BER')
     ax.set_title('3D Surface Plot of BER vs SNR and Code Rate')
-
-    # Add color bar
     fig.colorbar(surf, shrink=0.5, aspect=5)
-
     plt.show()
 
     
