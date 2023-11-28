@@ -27,7 +27,8 @@ for i = 1:6
         encodedVec(indRandom) = 1;
     end
     encodedVec = flip(encodedVec, 1);
-    
+    disp("Encoded string with error:")
+    disp(encodedVec);
     %----Begin decoding----
     errorSpace = decoder(encodedVec);
     if(errorSpace == 0)
