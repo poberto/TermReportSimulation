@@ -1,3 +1,4 @@
+#Written by Peter Bertola
 from helpers import InitOutputs
 
 #convolutional encoder class

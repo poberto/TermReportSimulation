@@ -1,3 +1,4 @@
+#Written by Peter Bertola
 import numpy as np
 import matplotlib.pyplot as plt
 from helpers import CalculateBER, CountCorrected, RandomBits, PlotTrellis

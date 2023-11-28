@@ -1,3 +1,4 @@
+#Written by Peter Bertola
 import numpy as np
 class Channel:
     

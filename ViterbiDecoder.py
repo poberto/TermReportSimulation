@@ -1,3 +1,5 @@
+#Written by Peter Bertola
+
 from helpers import HammingDistance, InitOutputs
 import numpy as np
 
