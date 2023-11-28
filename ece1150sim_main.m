@@ -1,8 +1,8 @@
 %Block-Code Simulation
 %Lillian Jones
 
-valVec = [2, 4, 8, 16, 32, 64, 1000, 2000]; %Vector to hold the length of the binary string for each iteration
-for i = 1:7
+valVec = [2, 4, 8, 16, 32, 64]; %Vector to hold the length of the binary string for each iteration
+for i = 1:6
     tic;
     lenMessage = valVec(i); %Generate a random length for the binary message (Between 2-4)
     numParity = 0; %Number of parity bits is initialized as 0
@@ -10,8 +10,8 @@ for i = 1:7
            numParity = numParity + 1;
     end
     dataStr = randi([0 1], lenMessage, 1); %Create a random binary string that is the length of the message
-    % disp("Data string prior to transmission:");
-    % disp(dataStr);
+    disp("Data string prior to transmission:");
+    disp(dataStr);
     lenWithParity = lenMessage + numParity;
     
     %----Call encoding function----
@@ -68,8 +68,8 @@ for i = 1:7
         end
     end
     dataVec = flip(dataVec, 1);
-    % disp("The corrected, original message is:");
-    % disp(dataVec);
+    disp("The decoded and corrected message is:");
+    disp(dataVec);
     toc;
     disp("----");
 end
