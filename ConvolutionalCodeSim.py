@@ -107,7 +107,7 @@ def main():
 
 
     #plots BER vs SNR    
-    SNRs = np.arange(0, 5, 0.5)
+    SNRs = np.arange(0, 20, 2)
     
     polynomial_sets = {'Rate 1/2, Constraint Length 3': ['111', '101'],  # Two polynomials of length 3
     'Rate 1/3, Constraint Length 3': ['111', '101', '110'],  # Three polynomials of length 3
@@ -116,7 +116,7 @@ def main():
 
     BERscoded = {scenario: [] for scenario in polynomial_sets} # BER values with convolutional coding
     BERsuncoded = []  # BER values without convolutional coding
-    
+    throughputs = {scenario: [] for scenario in polynomial_sets}
     times = {scenario: [] for scenario in polynomial_sets}
     
     for snr in SNRs:
@@ -144,6 +144,8 @@ def main():
             ber = CalculateBER(InputBits, DecodedBits)
             CorrectedErrors = CountCorrected(InputBits, np.array(list(map(int, ReceivedBits)), dtype=int), DecodedBits)
             BERscoded[scenario].append(CalculateBER(InputBits, DecodedBits))
+            throughput = BitLength / elapsed  # Bits per second
+            throughputs[scenario].append(throughput)
             
         #without Convolutional Coding
         signal = InputBits
@@ -166,6 +168,7 @@ def main():
     plt.legend()
     plt.show()
     
+    #plotting elapsedtime vs SNR
     plt.figure(figsize=(10, 6))
     for scenario, timevalues in times.items():
         plt.plot(SNRs, timevalues, label=scenario)
@@ -173,6 +176,18 @@ def main():
     plt.title('Encoding and Decoding Time vs SNR')
     plt.xlabel('SNR (dB)')
     plt.ylabel('Time (seconds)')
+    plt.grid(True)
+    plt.legend()
+    plt.show()
+    
+    # Plotting Throughput vs SNR for all scenarios
+    plt.figure(figsize=(10, 6))
+    for scenario, throughput_values in throughputs.items():
+        plt.plot(SNRs, throughput_values, label=f'{scenario}')
+
+    plt.title('Throughput vs SNR Comparison')
+    plt.xlabel('SNR (dB)')
+    plt.ylabel('Throughput (Bits per second)')
     plt.grid(True)
     plt.legend()
     plt.show()
