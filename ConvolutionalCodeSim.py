@@ -1,4 +1,5 @@
 #Written by Peter Bertola
+import time
 import numpy as np
 import matplotlib.pyplot as plt
 from helpers import CalculateBER, CountCorrected, RandomBits, PlotTrellis
@@ -12,6 +13,8 @@ from scipy.interpolate import griddata
 
 #This function is a test function that encodes and decodes a given bit sequence and asserts that the decoded bits match the input
 def TestEncodeDecode(InputBits, TestName):
+    start = time.time()
+    
     #defines the polynomials used for encoding and decoding and initializes the encoder and decoder
     polynomials = ['111', '101']
     encoder = ConvolutionalEncoder(3, polynomials)
@@ -20,11 +23,12 @@ def TestEncodeDecode(InputBits, TestName):
     #calculates the encoded bits and then decodes them using the encoder and decoder
     EncodedBits = encoder.encode(InputBits)
     DecodedBits, TrellisData, MLP  = decoder.decode(''.join(map(str, EncodedBits)))
-
+    end = time.time()
+    elapsed = end - start
     print(f"Input Bits: {InputBits}")
     print(f"Encoded Bits: {EncodedBits}")
     print(f"Decoded Bits: {DecodedBits}\n")
-    
+    print(f"Elapsed time: {elapsed}")
     #asserts that the decoded bits match the input
     assert ''.join(map(str, DecodedBits)) == ''.join(map(str, InputBits)), f"Test failed: {TestName} - Input: {InputBits}, Decoded: {DecodedBits}"
     print(f"Test passed: {TestName}")
@@ -109,10 +113,13 @@ def main():
 }
     BERscoded = {scenario: [] for scenario in polynomial_sets} # BER values with convolutional coding
     BERsuncoded = []  # BER values without convolutional coding
-
+    times = []
+    
     for snr in SNRs:
         
         for scenario, polys in polynomial_sets.items():
+            start = time.time()
+            
             K = len(polys[0])
             CodeRate = 1/len(polys)
             
@@ -125,8 +132,11 @@ def main():
             ReceivedBits = channel.transmit(signal)
             ReceivedBits = ''.join(map(str, ReceivedBits))
             DecodedBits, TrellisData, MLP = decoder.decode(ReceivedBits)
+            end = time.time()
             DecodedBits = np.array(list(map(int, DecodedBits)), dtype=int)
             
+            elapsed = end - start
+            times.append(elapsed)
             ber = CalculateBER(InputBits, DecodedBits)
             CorrectedErrors = CountCorrected(InputBits, np.array(list(map(int, ReceivedBits)), dtype=int), DecodedBits)
             BERscoded[scenario].append(CalculateBER(InputBits, DecodedBits))
@@ -183,6 +193,9 @@ def main():
     ax.set_title('3D Surface Plot of BER vs SNR and Code Rate')
     fig.colorbar(surf, shrink=0.5, aspect=5)
     plt.show()
+    
+    
+    print(np.mean(times))
 
     
 
