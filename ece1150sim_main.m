@@ -1,7 +1,7 @@
 %Block-Code Simulation
 %Lillian Jones
 
-valVec = [2, 4, 8, 16, 32, 64]; %Vector to hold the length of the binary string for each iteration
+valVec = [2, 4, 8, 16, 32, 1000]; %Vector to hold the length of the binary string for each iteration
 for i = 1:6
     tic;
     lenMessage = valVec(i); %Generate a random length for the binary message (Between 2-4)
@@ -27,8 +27,7 @@ for i = 1:6
         encodedVec(indRandom) = 1;
     end
     encodedVec = flip(encodedVec, 1);
-    disp("Encoded string with error:")
-    disp(encodedVec);
+    
     %----Begin decoding----
     errorSpace = decoder(encodedVec);
     if(errorSpace == 0)
@@ -72,6 +71,10 @@ for i = 1:6
     disp("The decoded and corrected message is:");
     disp(dataVec);
     toc;
+    elapsedTime=toc;
+    disp("Throughput (bits/s):");
+    throughput=lenMessage/elapsedTime;
+    disp(throughput);
     disp("----");
 end
 
