@@ -43,6 +43,8 @@ def main():
     InputBits = np.array(RandomBits(BitLength))
     polynomials = ['111', '101']
     
+    
+    
     # Conduct various tests with different input bit sequences to validate the encoder and decoder.
     # These tests cover basic encoding/decoding, handling of different bit patterns, and edge cases.
     TestEncodeDecode([1, 0, 1, 1], "Basic Encoding and Decoding")
@@ -113,7 +115,8 @@ def main():
 }
     BERscoded = {scenario: [] for scenario in polynomial_sets} # BER values with convolutional coding
     BERsuncoded = []  # BER values without convolutional coding
-    times = []
+    
+    times = {scenario: [] for scenario in polynomial_sets}
     
     for snr in SNRs:
         
@@ -136,7 +139,7 @@ def main():
             DecodedBits = np.array(list(map(int, DecodedBits)), dtype=int)
             
             elapsed = end - start
-            times.append(elapsed)
+            times[scenario].append(elapsed) 
             ber = CalculateBER(InputBits, DecodedBits)
             CorrectedErrors = CountCorrected(InputBits, np.array(list(map(int, ReceivedBits)), dtype=int), DecodedBits)
             BERscoded[scenario].append(CalculateBER(InputBits, DecodedBits))
@@ -162,6 +165,16 @@ def main():
     plt.legend()
     plt.show()
     
+    plt.figure(figsize=(10, 6))
+    for scenario, timevalues in times.items():
+        plt.plot(SNRs, timevalues, label=scenario)
+
+    plt.title('Encoding and Decoding Time vs SNR')
+    plt.xlabel('SNR (dB)')
+    plt.ylabel('Time (seconds)')
+    plt.grid(True)
+    plt.legend()
+    plt.show()
     
     #3D plot
     fig = plt.figure(figsize=(12, 9))
@@ -195,7 +208,7 @@ def main():
     plt.show()
     
     
-    print(np.mean(times))
+
 
     
 
