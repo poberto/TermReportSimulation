@@ -107,7 +107,7 @@ def main():
 
 
     #plots BER vs SNR    
-    SNRs = np.arange(0, 20, 2)
+    SNRs = np.arange(0, 5, 0.5)
     
     polynomial_sets = {'Rate 1/2, Constraint Length 3': ['111', '101'],  # Two polynomials of length 3
     'Rate 1/3, Constraint Length 3': ['111', '101', '110'],  # Three polynomials of length 3
