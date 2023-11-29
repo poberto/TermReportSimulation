@@ -112,7 +112,8 @@ def main():
     polynomial_sets = {'Rate 1/2, Constraint Length 3': ['111', '101'],  # Two polynomials of length 3
     'Rate 1/3, Constraint Length 3': ['111', '101', '110'],  # Three polynomials of length 3
     'Rate 1/2, Constraint Length 4': ['1111', '1011'],  # Two polynomials of length 4
-}
+   'Rate 3/4, Constraint Length 2': ['11', '10', '01']}  # Example polynomials for code rate 3/4 and constraint length 2
+
     BERscoded = {scenario: [] for scenario in polynomial_sets} # BER values with convolutional coding
     BERsuncoded = []  # BER values without convolutional coding
     
